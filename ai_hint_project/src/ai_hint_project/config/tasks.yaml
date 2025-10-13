@@ -1,0 +1,7 @@
+optimize_query_task:
+  description: "Improve the user's question: {user_query}"
+  expected_output: "Return your answer in valid JSON format only. Do not include any thoughts, reasoning, or extra text outside the JSON block. Example: {\"thoughts\": \"<brief reasoning>\", \"final_answer\": \"<your improved question>\"}"
+
+explain_task:
+  description: "Answer the question: {optimized_query} with a clear, detailed explanation. Include practical examples, edge case handling, and Python code if relevant."
+  expected_output: "Return your answer in valid JSON format only. Do not include any thoughts, reasoning, or extra text outside the JSON block. Example: {\"thoughts\": \"<brief reasoning>\", \"final_answer\": \"<your explanation>\"}"

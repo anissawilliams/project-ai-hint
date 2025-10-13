@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "./ai_hint_project/src/ai_hint_project",
+        "./ai_hint_project"
+    ]
+}
