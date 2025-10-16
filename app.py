@@ -1,41 +1,36 @@
 import streamlit as st
-
-
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
-
 from ai_hint_project.src.ai_hint_project.crew import create_crew
 
-st.title("AI Programming Tutor 👨‍🏫")
+sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 
-#topic = st.text_input("Enter a programming topic (e.g., recursion, OOP, Python loops)")
-user_query = st.text_area("Ask a programming question")
+st.title("🧠 AI Programming Tutor Crew")
+depth = st.sidebar.radio("Explanation depth", ["Fast", "Thorough"])
 
-if st.button("Optimize and Explain"):
-    if user_query:
-        with st.spinner("Running your AI tutor crew..."):
-            try:
-                result = create_crew(user_query)
-                st.success("CrewAI completed successfully!")
-                st.markdown("### 🧠 CrewAI Response") 
 
-                st.markdown("### 📝 Original Query")
-                st.markdown(user_query)
+user_level = st.selectbox(
+    "What is your experience level in programming?",
+    ("Beginner", "Intermediate", "Advanced"),
+)
 
-                st.markdown("### ✨ Optimized Query")
-                st.markdown(result["optimized_query"])
+user_query = st.text_area("Enter your programming question:")
+user_code = st.text_area("Paste your code (optional):")
 
-                st.markdown("### 📘 Explanation")
-                st.markdown(result["explanation"])
+if st.button("Run Crew"):
+    with st.spinner("Running your AI tutor crew..."):
+        result = create_crew(user_query, user_level.lower(), user_code, depth=depth)  
 
-                #st.write(result)  # Show raw output
-                    
-            except Exception as e:
-                st.error("❌ Error running CrewAI")
-                st.code(str(e))
+    st.markdown("### ✨ Optimized Query")
+    st.markdown(result["optimized_query"])
+    st.markdown("### 🧾 Explanation")
+    st.markdown(result["explanation"])
+    st.markdown("### ✨ Guide")
+    st.markdown(result["guide"])
+    st.markdown("### Debugging")
+    st.markdown(result["debugging"])
+    st.markdown("### Optimization")
+    st.markdown(result["optimization"])
+    st.markdown("### Theory")
+    st.markdown(result["theory"])
 
-if st.button("Save session"):
-    st.success("Session saved!")
-     # Build log entry
-    
