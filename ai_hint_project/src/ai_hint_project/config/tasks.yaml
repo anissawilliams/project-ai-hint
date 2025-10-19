@@ -1,38 +1,5 @@
-- name: clarify_query
-  description: Rewrite the user’s vague programming question into a clear, specific query.
-  agent: query_optimizer
-  expected_output: optimized_query
-  input_variables: ["user_query"]
-
-- name: explain_concept
-  description: Provide a beginner-friendly explanation of the concept.
-  agent: explainer
-  expected_output: explanation
-  input_variables: ["optimized_query"]
-
-- name: step_by_step_guide
-  description: Offer a step-by-step guide to help the user understand the concept.
-  agent: guide
-  expected_output: guide
-  input_variables: ["optimized_query"]
-
-- name: debug_attempt
-  description = (
-    "You're a Python expert. Refactor the following code for clarity, performance, and readability. "
-    "Explain any changes you make.\n\n```python\n{user_code}\n```"
-  )
-  agent: debugger
-  expected_output: debugging
-  input_variables: ["user_code"]
-
-- name: optimize_code
-  description: Refactor the user’s code for clarity and performance.
-  agent: optimizer
-  expected_output: optimization
-  input_variables: ["user_code"]
-
-- name: explore_theory
-  description: Explore the theoretical principles behind the concept or code.
-  agent: theorist
-  expected_output: theory
-  input_variables: ["optimized_query"]
+tasks:
+  explainer:
+    name: "Explain Concept"
+    description: "Explain this topic in your unique style: {query}"
+    expected_output: "A clear, engaging explanation using your persona's metaphors for beginners."

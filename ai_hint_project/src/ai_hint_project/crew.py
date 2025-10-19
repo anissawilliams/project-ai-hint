@@ -1,134 +1,89 @@
-import sys
-sys.path.insert(0, "/Users/anissawilliams/research/project-ai-hint/crewAI")  # adjust to your actual path
-
-from crewai import Crew, Agent, Task, TaskOutput
-import yaml
 import os
+import yaml
 import re
-from datetime import datetime
+from crewai import Crew, Agent, Task
+from langchain_community.llms import Ollama
 
-from pydantic import BaseModel, ValidationError
+from . import levels
+
 os.environ["LITELLM_PROVIDER"] = "ollama"
 
+# LangChain Ollama setup
+llm = Ollama(model="ollama/phi3:mini")
 
 
-MODEL_ROUTING = {
-    "optimizer": "deepseek-coder",
-    "debugger": "deepseek-coder",
-    "explainer": "deepseek-r1:7b",
-    "theorist": "deepseek-r1:7b",
-    "guide": "deepseek-r1:7b",
-    "beginner_query_optimizer": "deepseek-r1:7b",
-    "advanced_query_optimizer": "deepseek-r1:7b",
-}
+# adding leveling
 
-from langchain.llms import Ollama
 
+# Load YAML config
 def load_yaml(path):
     with open(path, 'r') as f:
         return yaml.safe_load(f)
 
-def create_crew(user_query, user_level, user_code=None, depth="Thorough"):
-    print("✅ create_crew() called")
+# Detect if input contains code
+
+
+def is_code_input(text):
+    # Look for actual code patterns, not just symbols
+    code_patterns = [
+        r"\bdef\b", r"\bclass\b", r"\bimport\b", r"\breturn\b",
+        r"\bif\b\s*\(?.*?\)?\s*:", r"\bfor\b\s*\(?.*?\)?\s*:", r"\bwhile\b\s*\(?.*?\)?\s*:",
+        r"\btry\b\s*:", r"\bexcept\b\s*:", r"\w+\s*=\s*.+", r"\w+\(.*?\)", r"{.*?}", r"<.*?>"
+    ]
+    return any(re.search(pattern, text) for pattern in code_patterns)
+
+# Persona-specific reactions to pasted code
+persona_reactions = {
+    "Batman": "Code received. Looks like a breach in logic. Let’s patch the vulnerability before it spreads.",
+    "Yoda": "Code, you have pasted. Analyze it, we must. Hidden, the bug may be.",
+    "Spider-Gwen": "Nice drop! Let’s swing through this syntax and catch any bugs midair.",
+    "Shuri": "Vibranium-grade logic? Let’s scan it with Wakandan tech and optimize the flow.",
+    "Elsa": "This code is… chaotic. Let me freeze the bugs and refactor with elegance.",
+    "Wednesday Addams": "You’ve pasted code. How delightfully broken it looks. Let’s dissect it like a corpse.",
+    "Iron Man": "Code drop detected. Let’s run diagnostics and upgrade it to Stark-level performance.",
+    "Nova": "Cosmic code detected. Let’s orbit through its logic and illuminate the stars within.",
+    "Zee": "Code incoming! Let’s treat this like a boss fight and break it down tactically.",
+    "Sherlock Holmes": "Ah, a code snippet. Let’s deduce its structure and uncover any hidden flaws."
+}
+
+def create_crew(persona: str, user_question: str):
+    print("✅ create_crew() called with persona:", persona)
 
     base_dir = os.path.dirname(__file__)
     agents_config = load_yaml(os.path.join(base_dir, 'config/agents.yaml'))
+    tasks_config = load_yaml(os.path.join(base_dir, 'config/tasks.yaml'))
 
-    def select_model(agent_key: str, depth: str = "Thorough") -> str:
-        if agent_key in ["explainer", "guide", "theorist"]:
-            return "deepseek-coder" if depth == "Fast" else "deepseek-r1:7b"
-        return MODEL_ROUTING.get(agent_key, "deepseek-coder")  # fallback default
+    agent_cfg = agents_config['agents'].get(persona)
+    if not agent_cfg:
+        raise ValueError(f"Unknown persona: {persona}")
 
-    def run_agent(agent_key, task_name, description, expected_output):
-        agent_cfg = agents_config[agent_key]
-        # Choose model based on agent_key and depth mode (fast or thorough)
-       
-        agent_cfg = agents_config[agent_key]
-        model_name = "ollama/" + select_model(agent_key, depth)
-        llm = Ollama(model=model_name)
+    agent = Agent(
+        role=agent_cfg['role'],
+        goal=agent_cfg['goal'],
+        backstory=agent_cfg['backstory'],
+        level=agent_cfg.get('level', 'beginner'),
+        verbose=False,
+        llm=llm
+    )
+
+    reaction = persona_reactions.get(persona, "")
+    if is_code_input(user_question):
+        task_description = f"{reaction}\n\n{user_question}"
+    else:
+        task_description = user_question
+
+    task_template = tasks_config['tasks']['explainer']
+    task = Task(
+        name=task_template['name'],
+        description=task_template['description'].format(query=task_description),
+        expected_output=task_template['expected_output'],
+        agent=agent
+    )
+
+    crew = Crew(agents=[agent], tasks=[task], verbose=True)
+    result = crew.kickoff()
+    # Update agent level after task completion
+    levels.update_level(persona)
     
-        agent = Agent(
-            role=agent_cfg['role'],
-            goal=agent_cfg['goal'],
-            backstory=agent_cfg['backstory'],
-            level=agent_cfg['level'],
-            verbose=True,
-            llm=llm
-        )
-        task = Task(
-            name=task_name,
-            description=description,
-            expected_output=expected_output,
-            agent=agent
-        )
-        crew = Crew(agents=[agent], tasks=[task], verbose=True)
-        print(f"🧠 Running {agent_key}...")
-        print(f"🧠 Using model {model_name} for agent {agent_key}")
-        print(f"🧠 Prompt for {agent_key}:\n{description}")
-        result = crew.kickoff()
-
-        #match = re.search(r"Final Answer:\s*(.*)", result.tasks_output[0].raw, re.DOTALL)
-       
-        cleaned_content = re.sub(r"<think>.*?</think>\n?", "",result.tasks_output[0].raw, flags=re.DOTALL) 
-        return cleaned_content
-
-    explanation = None
-    optimization = None
-    debugging = None
-    theory = None
-    guide = None
-
-    # Phase 1: Optimize query
-
-    optimized_query = run_agent(
-            f"{user_level}_query_optimizer",
-            "Optimize Query",
-            f"Improve the user's question: {user_query}",
-            "optimized_query"
-        )
-    explanation = run_agent(
-            f"{user_level}_explainer",
-            "Explain Concept",
-            f"Explain the topic: {optimized_query}",
-            "explanation"
-        )
-    guide = run_agent(
-            "guide",
-            "Step-by-Step Guide",
-            f"Guide the user through: {optimized_query}",
-            "guide"
-    ) if user_level == "beginner" else None
-
-    optimization = run_agent(
-            "optimizer",
-            "Optimize Code",
-            f"Refactor this code for clarity and performance: {user_code}",
-            "optimization"
-        ) if user_code else None
-
-
-    theory = run_agent(
-            "theorist",
-            "Explore Theory",
-            f"Explore the principles behind: {optimized_query}",
-            "theory"
-    ) if user_level == "advanced" else None
-
-   #level-agnostic
-    debugging = run_agent(
-        "debugger",
-        "Debug Code",
-        f"Analyze and improve this code: {user_code}",
-        "debugging"
-    ) if user_code else None
-
-
-    return {
-        "optimized_query": optimized_query,
-        "explanation": explanation,
-        "guide": guide,
-        "debugging": debugging,
-        "optimization": optimization,
-        "theory": theory
-    }
-
+    cleaned_content = re.sub(r"<think>.*?</think>\n?", "", result.tasks_output[0].raw, flags=re.DOTALL)
+    return cleaned_content
