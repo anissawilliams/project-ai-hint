@@ -10,7 +10,7 @@ from getpass import getpass
 
 set_debug(True)
 #From https://colab.research.google.com/drive/1MsQNc7AMS3qY4Y94_ZN8ppWcNh0RgD-v?usp=sharing#scrollTo=HGz1kWy88tdO
-CODE_LLAMAKEY = "c114e0ee70ae4e368067f219bb16afec.fG098K1D6AxumlYwsfeU0rsl"
+
 
 llm = ChatOllama(
     model="llama3.1",
