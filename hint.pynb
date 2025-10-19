@@ -1,0 +1,67 @@
+%matplotlib inline
+from langchain_community.llms import Ollama
+
+#from langchain_ollama import Ollama, OllamaLLM
+from langchain_ollama import ChatOllama
+from langchain_core.messages import HumanMessage
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_community.document_loaders import TextLoader
+from langchain_community.vectorstores import FAISS
+from langchain_community.embeddings import OllamaEmbeddings
+from langchain.prompts import ChatPromptTemplate
+from langchain.chains import RetrievalQA
+
+from langchain.evaluation.criteria import Criteria
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+student_queries = [
+    "How do I fix a NullPointerException in Java?",
+    "What does the 'this' keyword mean inside a Java class?",
+    "Why is my for loop not terminating?",
+    "Can you explain inheritance in Java without giving the full code?",
+    "What’s the difference between an ArrayList and a LinkedList?",
+    "How do I debug a stack overflow error in Java?",
+    "What is the time complexity of binary search in Java?",
+    "Why is my method returning null?",
+    "Can you help me understand Java interfaces?",
+    "What does 'pass by value' mean in Java?"
+]
+
+df = pd.DataFrame({"question": student_queries})
+
+# 📏 Step 2: Define a manual rubric using simple heuristics
+rubric = {
+    "clarity": lambda q: len(q.split()) > 5,
+    "specificity": lambda q: any(word in q.lower() for word in [
+        "loop", "inheritance", "nullpointerexception", "stack overflow",
+        "arraylist", "linkedlist", "binary search", "interfaces"
+    ]),
+    "effort": lambda q: any(word in q.lower() for word in ["why", "how", "can you"])
+}
+
+for key, func in rubric.items():
+    df[key] = df["question"].apply(lambda q: int(func(q)))
+
+
+
+chat_model = ChatOllama(model="llama3")
+
+responses = []
+for q in df["question"]:
+    prompt = f"You are a Java tutor. Explain the concept behind this question without giving the full answer: {q}"
+    reply = chat_model.invoke([HumanMessage(content=prompt)])
+    responses.append(reply.content)
+
+df["response"] = responses
+print(df.response)
+
+plt.figure(figsize=(10, 6))
+sns.heatmap(df[["clarity", "specificity", "effort"]], annot=True, cmap="YlGnBu", cbar=False, linewidths=0.5)
+plt.title("Rubric Evaluation of Student Java Coding Questions", fontsize=14)
+plt.xticks(rotation=45)
+plt.yticks(rotation=0)
+plt.tight_layout()
+plt.show()
