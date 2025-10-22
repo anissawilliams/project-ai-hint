@@ -1,0 +1,12 @@
+streamlit
+crewai
+crewai-tools
+pyyaml
+faiss-cpu
+sentence-transformers
+langchain
+langchain-community
+numpy
+scikit-learn
+groq
+langchain-groq
