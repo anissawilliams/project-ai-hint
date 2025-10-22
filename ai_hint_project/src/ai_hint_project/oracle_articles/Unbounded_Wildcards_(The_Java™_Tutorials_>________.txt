@@ -1,0 +1,160 @@
+Unbounded Wildcards (The Java™ Tutorials >        
+            Learning the Java Language > Generics (Updated))
+A browser with JavaScript enabled is required for this page to operate properly.
+Documentation
+The Java™ Tutorials
+Hide TOC
+Generics (Updated)
+Why Use Generics?
+Generic Types
+Raw Types
+Generic Methods
+Bounded Type Parameters
+Generic Methods and Bounded Type Parameters
+Generics, Inheritance, and Subtypes
+Type Inference
+Wildcards
+Upper Bounded Wildcards
+Unbounded Wildcards
+Lower Bounded Wildcards
+Wildcards and Subtyping
+Wildcard Capture and Helper Methods
+Guidelines for Wildcard Use
+Type Erasure
+Erasure of Generic Types
+Erasure of Generic Methods
+Effects of Type Erasure and Bridge Methods
+Non-Reifiable Types
+Restrictions on Generics
+Questions and Exercises
+Trail:
+Learning the Java Language
+Lesson:
+Generics (Updated)
+Section:
+Wildcards
+Home Page
+>
+Learning the Java Language
+>
+Generics (Updated)
+« Previous
+•
+Trail
+•
+Next »
+The Java Tutorials have been written for JDK 8. Examples and practices described in this page don't take advantage of improvements introduced in later releases and might use technology no longer available.
+See
+Dev.java
+for updated tutorials taking advantage of the latest releases.
+See
+Java Language Changes
+for a summary of updated language features in Java SE 9 and subsequent releases.
+See
+JDK Release Notes
+for information about new features, enhancements, and removed or deprecated options for all JDK releases.
+Unbounded Wildcards
+The unbounded wildcard type is specified using the wildcard character (
+?
+), for example,
+List<?>
+. This is called a
+list of unknown type
+. There are two scenarios where an unbounded wildcard is a useful approach:
+If you are writing a method that can be implemented using functionality provided in the
+Object
+class.
+When the code is using methods in the generic class that don't depend on the type parameter.  For example,
+List.size
+or
+List.clear
+. In fact,
+Class<?>
+is so often used because most of the methods in
+Class<T>
+do not depend on
+T
+.
+Consider the following method,
+printList
+:
+public static void printList(List<Object> list) {
+    for (Object elem : list)
+        System.out.println(elem + " ");
+    System.out.println();
+}
+The goal of
+printList
+is to print a list of any type, but it fails to achieve that goal — it prints only a list of
+Object
+instances; it cannot print
+List<Integer>
+,
+List<String>
+,
+List<Double>
+, and so on, because they are not subtypes of
+List<Object>
+. To write a generic
+printList
+method, use
+List<?>
+:
+public static void printList(List<?> list) {
+    for (Object elem: list)
+        System.out.print(elem + " ");
+    System.out.println();
+}
+Because for any concrete type
+A
+,
+List<A>
+is a subtype of
+List<?>
+, you can use
+printList
+to print a list of any type:
+List<Integer> li = Arrays.asList(1, 2, 3);
+List<String>  ls = Arrays.asList("one", "two", "three");
+printList(li);
+printList(ls);
+Note:
+The
+Arrays.asList
+method is used in examples throughout this lesson.  This static factory method converts the specified array and returns a fixed-size list.
+It's important to note that
+List<Object>
+and
+List<?>
+are not the same. You can insert an
+Object
+, or any subtype of
+Object
+, into a
+List<Object>
+.  But you can only insert
+null
+into a
+List<?>
+. The
+Guidelines for Wildcard Use
+section has more information on how to determine what kind of wildcard, if any, should be used in a given situation.
+« Previous
+•
+Trail
+•
+Next »
+About Oracle
+|
+Contact Us
+|
+Legal Notices
+|
+Terms of Use
+|
+Your Privacy Rights
+Copyright © 1995, 2024 Oracle and/or its affiliates. All rights reserved.
+Previous page:
+Upper Bounded Wildcards
+Next page:
+Lower Bounded Wildcards

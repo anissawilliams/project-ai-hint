@@ -1,0 +1,85 @@
+Lesson: Language Basics (The Java™ Tutorials > Learning the Java Language)
+A browser with JavaScript enabled is required for this page to operate properly.
+Documentation
+The Java™ Tutorials
+Hide TOC
+Language Basics
+Variables
+Primitive Data Types
+Arrays
+Summary of Variables
+Questions and Exercises
+Operators
+Assignment, Arithmetic, and Unary Operators
+Equality, Relational, and Conditional Operators
+Bitwise and Bit Shift Operators
+Summary of Operators
+Questions and Exercises
+Expressions, Statements, and Blocks
+Questions and Exercises
+Control Flow Statements
+The if-then and if-then-else Statements
+The switch Statement
+The while and do-while Statements
+The for Statement
+Branching Statements
+Summary of Control Flow Statements
+Questions and Exercises
+Trail:
+Learning the Java Language
+Home Page
+>
+Learning the Java Language
+« Previous
+•
+Trail
+•
+Next »
+The Java Tutorials have been written for JDK 8. Examples and practices described in this page don't take advantage of improvements introduced in later releases and might use technology no longer available.
+See
+Dev.java
+for updated tutorials taking advantage of the latest releases.
+See
+Java Language Changes
+for a summary of updated language features in Java SE 9 and subsequent releases.
+See
+JDK Release Notes
+for information about new features, enhancements, and removed or deprecated options for all JDK releases.
+Lesson: Language Basics
+Variables
+You've already learned that objects store their state in fields. However, the Java 
+programming language also uses the term "variable" as well. This section discusses 
+this relationship, plus variable naming rules and conventions, 
+basic data types (primitive types, character strings, and arrays), default values, and literals.
+Operators
+This section describes the operators of the Java programming language. It presents the most
+commonly-used operators first, and the less commonly-used operators last. Each discussion 
+includes code samples that you can compile and run.
+Expressions, Statements, and Blocks
+Operators may be used in building expressions, which compute values; expressions are the core components of statements; statements may be grouped into blocks.
+ 
+This section discusses expressions, statements, and blocks using example code that you've already 
+seen.
+Control Flow Statements
+This section describes the control flow statements supported by the Java programming language.
+It covers the decisions-making, looping, and branching statements that enable your programs to conditionally
+execute particular blocks of code.
+« Previous
+•
+Trail
+•
+Next »
+About Oracle
+|
+Contact Us
+|
+Legal Notices
+|
+Terms of Use
+|
+Your Privacy Rights
+Copyright © 1995, 2024 Oracle and/or its affiliates. All rights reserved.
+Previous page:
+Previous Lesson
+Next page:
+Variables

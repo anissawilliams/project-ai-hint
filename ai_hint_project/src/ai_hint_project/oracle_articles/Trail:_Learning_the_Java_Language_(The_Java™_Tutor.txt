@@ -1,0 +1,67 @@
+Trail: Learning the Java Language (The Java™ Tutorials)
+A browser with JavaScript enabled is required for this page to operate properly.
+Documentation
+The Java™ Tutorials
+Home Page
+« Previous
+•
+Trail
+•
+Next »
+The Java Tutorials have been written for JDK 8. Examples and practices described in this page don't take advantage of improvements introduced in later releases and might use technology no longer available.
+See
+Dev.java
+for updated tutorials taking advantage of the latest releases.
+See
+Java Language Changes
+for a summary of updated language features in Java SE 9 and subsequent releases.
+See
+JDK Release Notes
+for information about new features, enhancements, and removed or deprecated options for all JDK releases.
+Trail: Learning the Java Language
+This trail covers the fundamentals of programming in the Java programming language.
+Object-Oriented Programming Concepts
+teaches you the core concepts behind object-oriented programming: objects, messages, classes, and inheritance. This lesson ends by showing you how these concepts translate into code. Feel free to skip this lesson if you are already familiar with object-oriented programming.
+Language Basics
+describes the traditional features of the language, including variables, arrays, data types, operators, and control flow.
+Classes and Objects
+describes how to write the classes from which objects are created, and how to create and use the objects.
+Annotations
+are a form of metadata and provide information for the compiler. This lesson describes where and how to use annotations in a program effectively.
+Interfaces and Inheritance
+describes interfaces—what they are, why you would want to write one, and how to write one. This section also describes the way in which you can derive one class from another. That is, how a
+subclass
+can inherit fields and methods from a
+superclass
+. You will learn that all classes are derived from the
+Object
+class, and how to modify the methods that a subclass inherits from superclasses.
+Numbers and Strings
+This lesson describes how to use
+Number
+and
+String
+objects The lesson also shows you how to format data for output.
+Generics
+are a powerful feature of the Java programming language. They improve the type safety of your code, making more of your bugs detectable at compile time.
+Packages
+are a feature of the Java programming language that help you to organize and structure your classes and their relationships to one another.
+« Previous
+•
+TOC
+•
+Next »
+About Oracle
+|
+Contact Us
+|
+Legal Notices
+|
+Terms of Use
+|
+Your Privacy Rights
+Copyright © 1995, 2024 Oracle and/or its affiliates. All rights reserved.
+Previous page:
+Beginning of Tutorial
+Next page:
+Object-Oriented Programming Concepts

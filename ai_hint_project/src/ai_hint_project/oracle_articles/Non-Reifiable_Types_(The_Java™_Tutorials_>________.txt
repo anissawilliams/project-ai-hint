@@ -1,0 +1,233 @@
+Non-Reifiable Types (The Java™ Tutorials >        
+            Learning the Java Language > Generics (Updated))
+A browser with JavaScript enabled is required for this page to operate properly.
+Documentation
+The Java™ Tutorials
+Hide TOC
+Generics (Updated)
+Why Use Generics?
+Generic Types
+Raw Types
+Generic Methods
+Bounded Type Parameters
+Generic Methods and Bounded Type Parameters
+Generics, Inheritance, and Subtypes
+Type Inference
+Wildcards
+Upper Bounded Wildcards
+Unbounded Wildcards
+Lower Bounded Wildcards
+Wildcards and Subtyping
+Wildcard Capture and Helper Methods
+Guidelines for Wildcard Use
+Type Erasure
+Erasure of Generic Types
+Erasure of Generic Methods
+Effects of Type Erasure and Bridge Methods
+Non-Reifiable Types
+Restrictions on Generics
+Questions and Exercises
+Trail:
+Learning the Java Language
+Lesson:
+Generics (Updated)
+Section:
+Type Erasure
+Home Page
+>
+Learning the Java Language
+>
+Generics (Updated)
+« Previous
+•
+Trail
+•
+Next »
+The Java Tutorials have been written for JDK 8. Examples and practices described in this page don't take advantage of improvements introduced in later releases and might use technology no longer available.
+See
+Dev.java
+for updated tutorials taking advantage of the latest releases.
+See
+Java Language Changes
+for a summary of updated language features in Java SE 9 and subsequent releases.
+See
+JDK Release Notes
+for information about new features, enhancements, and removed or deprecated options for all JDK releases.
+Non-Reifiable Types
+The section
+Type Erasure
+discusses the process where the compiler removes information related to type parameters and type arguments. Type erasure has consequences related to variable arguments (also known as
+varargs
+) methods whose varargs formal parameter has a non-reifiable type. See the section
+Arbitrary Number of Arguments
+in
+Passing Information to a Method or a Constructor
+for more information about varargs methods.
+This page covers the following topics:
+Non-Reifiable Types
+Heap Pollution
+Potential Vulnerabilities of Varargs Methods with Non-Reifiable Formal Parameters
+Preventing Warnings from Varargs Methods with Non-Reifiable Formal Parameters
+Non-Reifiable Types
+A
+reifiable
+type is a type whose type information is fully available at runtime. This includes primitives, non-generic types, raw types, and invocations of unbound wildcards.
+Non-reifiable types
+are types where information has been removed at compile-time by type erasure — invocations of generic types that are not defined as unbounded wildcards. A non-reifiable type does not have all of its information available at runtime. Examples of non-reifiable types are
+List<String>
+and
+List<Number>
+; the JVM cannot tell the difference between these types at runtime. As shown in
+Restrictions on Generics
+, there are certain situations where non-reifiable types cannot be used: in an
+instanceof
+expression, for example, or as an element in an array.
+Heap Pollution
+Heap pollution
+occurs when a variable of a parameterized type refers to an object that is not of that parameterized type. This situation occurs if the program performed some operation that gives rise to an unchecked warning at compile-time. An
+unchecked warning
+is generated if, either at compile-time (within the limits of the compile-time type checking rules) or at runtime, the correctness of an operation involving a parameterized type (for example, a cast or method call) cannot be verified. For example, heap pollution occurs when mixing raw types and parameterized types, or when performing unchecked casts.
+In normal situations, when all code is compiled at the same time, the compiler issues an unchecked warning to draw your attention to potential heap pollution. If you compile sections of your code separately, it is difficult to detect the potential risk of heap pollution. If you ensure that your code compiles without warnings, then no heap pollution can occur.
+Potential Vulnerabilities of Varargs Methods with Non-Reifiable Formal Parameters
+Generic methods that include vararg input parameters can cause heap pollution.
+Consider the following
+ArrayBuilder
+class:
+public class ArrayBuilder {
+
+  public static <T> void addToList (List<T> listArg, T... elements) {
+    for (T x : elements) {
+      listArg.add(x);
+    }
+  }
+
+  public static void faultyMethod(List<String>... l) {
+    Object[] objectArray = l;     // Valid
+    objectArray[0] = Arrays.asList(42);
+    String s = l[0].get(0);       // ClassCastException thrown here
+  }
+
+}
+The following example,
+HeapPollutionExample
+uses the
+ArrayBuilder
+class:
+public class HeapPollutionExample {
+
+  public static void main(String[] args) {
+
+    List<String> stringListA = new ArrayList<String>();
+    List<String> stringListB = new ArrayList<String>();
+
+    ArrayBuilder.addToList(stringListA, "Seven", "Eight", "Nine");
+    ArrayBuilder.addToList(stringListB, "Ten", "Eleven", "Twelve");
+    List<List<String>> listOfStringLists =
+      new ArrayList<List<String>>();
+    ArrayBuilder.addToList(listOfStringLists,
+      stringListA, stringListB);
+
+    ArrayBuilder.faultyMethod(Arrays.asList("Hello!"), Arrays.asList("World!"));
+  }
+}
+When compiled, the following warning is produced by the definition of the
+ArrayBuilder.addToList
+method:
+warning: [varargs] Possible heap pollution from parameterized vararg type T
+When the compiler encounters a varargs method, it translates the varargs formal parameter into an array. However, the Java programming language does not permit the creation of arrays of parameterized types. In the method
+ArrayBuilder.addToList
+, the compiler translates the varargs formal parameter
+T... elements
+to the formal parameter
+T[] elements
+, an array. However, because of type erasure, the compiler converts the varargs formal parameter to
+Object[] elements
+. Consequently, there is a possibility of heap pollution.
+The following statement assigns the varargs formal parameter
+l
+to the
+Object
+array
+objectArgs
+:
+Object[] objectArray = l;
+This statement can potentially introduce heap pollution. A value that does match the parameterized type of the varargs formal parameter
+l
+can be assigned to the variable
+objectArray
+, and thus can be assigned to
+l
+. However, the compiler does not generate an unchecked warning at this statement. The compiler has already generated a warning when it translated the varargs formal parameter
+List<String>... l
+to the formal parameter
+List[] l
+. This statement is valid; the variable
+l
+has the type
+List[]
+, which is a subtype of
+Object[]
+.
+Consequently, the compiler does not issue a warning or error if you assign a
+List
+object of any type to any array component of the
+objectArray
+array as shown by this statement:
+objectArray[0] = Arrays.asList(42);
+This statement assigns to the first array component of the
+objectArray
+array with a
+List
+object that contains one object of type
+Integer
+.
+Suppose you invoke
+ArrayBuilder.faultyMethod
+with the following statement:
+ArrayBuilder.faultyMethod(Arrays.asList("Hello!"), Arrays.asList("World!"));
+At runtime, the JVM throws a
+ClassCastException
+at the following statement:
+// ClassCastException thrown here
+String s = l[0].get(0);
+The object stored in the first array component of the variable
+l
+has the type
+List<Integer>
+, but this statement is expecting an object of type
+List<String>
+.
+Prevent Warnings from Varargs Methods with Non-Reifiable Formal Parameters
+If you declare a varargs method that has parameters of a parameterized type, and you ensure that the body of the method does not throw a
+ClassCastException
+or other similar exception due to improper handling of the varargs formal parameter, you can prevent the warning that the compiler generates for these kinds of varargs methods by adding the following annotation to static and non-constructor method declarations:
+@SafeVarargs
+The
+@SafeVarargs
+annotation is a documented part of the method's contract; this annotation asserts that the implementation of the method will not improperly handle the varargs formal parameter.
+It is also possible, though less desirable, to suppress such warnings by adding the following to the method declaration:
+@SuppressWarnings({"unchecked", "varargs"})
+However, this approach does not suppress warnings generated from the method's call site.  If you are unfamiliar with the
+@SuppressWarnings
+syntax, see
+Annotations
+.
+« Previous
+•
+Trail
+•
+Next »
+About Oracle
+|
+Contact Us
+|
+Legal Notices
+|
+Terms of Use
+|
+Your Privacy Rights
+Copyright © 1995, 2024 Oracle and/or its affiliates. All rights reserved.
+Previous page:
+Effects of Type Erasure and Bridge Methods
+Next page:
+Restrictions on Generics

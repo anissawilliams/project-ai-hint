@@ -1,0 +1,144 @@
+Erasure of Generic Types (The Java™ Tutorials >        
+            Learning the Java Language > Generics (Updated))
+A browser with JavaScript enabled is required for this page to operate properly.
+Documentation
+The Java™ Tutorials
+Hide TOC
+Generics (Updated)
+Why Use Generics?
+Generic Types
+Raw Types
+Generic Methods
+Bounded Type Parameters
+Generic Methods and Bounded Type Parameters
+Generics, Inheritance, and Subtypes
+Type Inference
+Wildcards
+Upper Bounded Wildcards
+Unbounded Wildcards
+Lower Bounded Wildcards
+Wildcards and Subtyping
+Wildcard Capture and Helper Methods
+Guidelines for Wildcard Use
+Type Erasure
+Erasure of Generic Types
+Erasure of Generic Methods
+Effects of Type Erasure and Bridge Methods
+Non-Reifiable Types
+Restrictions on Generics
+Questions and Exercises
+Trail:
+Learning the Java Language
+Lesson:
+Generics (Updated)
+Section:
+Type Erasure
+Home Page
+>
+Learning the Java Language
+>
+Generics (Updated)
+« Previous
+•
+Trail
+•
+Next »
+The Java Tutorials have been written for JDK 8. Examples and practices described in this page don't take advantage of improvements introduced in later releases and might use technology no longer available.
+See
+Dev.java
+for updated tutorials taking advantage of the latest releases.
+See
+Java Language Changes
+for a summary of updated language features in Java SE 9 and subsequent releases.
+See
+JDK Release Notes
+for information about new features, enhancements, and removed or deprecated options for all JDK releases.
+Erasure of Generic Types
+During the type erasure process, the Java compiler erases all type parameters and replaces each with its first bound if the type parameter is bounded, or
+Object
+if the type parameter is unbounded.
+Consider the following generic class that represents a node in a singly linked list:
+public class Node<T> {
+
+    private T data;
+    private Node<T> next;
+
+    public Node(T data, Node<T> next) {
+        this.data = data;
+        this.next = next;
+    }
+
+    public T getData() { return data; }
+    // ...
+}
+Because the type parameter
+T
+is unbounded, the Java compiler replaces it with
+Object
+:
+public class Node {
+
+    private Object data;
+    private Node next;
+
+    public Node(Object data, Node next) {
+        this.data = data;
+        this.next = next;
+    }
+
+    public Object getData() { return data; }
+    // ...
+}
+In the following example, the generic
+Node
+class uses a bounded type parameter:
+public class Node<T extends Comparable<T>> {
+
+    private T data;
+    private Node<T> next;
+
+    public Node(T data, Node<T> next) {
+        this.data = data;
+        this.next = next;
+    }
+
+    public T getData() { return data; }
+    // ...
+}
+The Java compiler replaces the bounded type parameter
+T
+with the first bound class,
+Comparable
+:
+public class Node {
+
+    private Comparable data;
+    private Node next;
+
+    public Node(Comparable data, Node next) {
+        this.data = data;
+        this.next = next;
+    }
+
+    public Comparable getData() { return data; }
+    // ...
+}
+« Previous
+•
+Trail
+•
+Next »
+About Oracle
+|
+Contact Us
+|
+Legal Notices
+|
+Terms of Use
+|
+Your Privacy Rights
+Copyright © 1995, 2024 Oracle and/or its affiliates. All rights reserved.
+Previous page:
+Type Erasure
+Next page:
+Erasure of Generic Methods

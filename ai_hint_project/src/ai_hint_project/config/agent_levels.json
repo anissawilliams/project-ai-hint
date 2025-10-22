@@ -9,6 +9,10 @@
   },
   "Nova": {
     "level": 1,
+    "tasks_completed": 2
+  },
+  "Yoda": {
+    "level": 1,
     "tasks_completed": 1
   }
 }

@@ -1,0 +1,121 @@
+Generic Methods (The Java™ Tutorials >        
+            Learning the Java Language > Generics (Updated))
+A browser with JavaScript enabled is required for this page to operate properly.
+Documentation
+The Java™ Tutorials
+Hide TOC
+Generics (Updated)
+Why Use Generics?
+Generic Types
+Raw Types
+Generic Methods
+Bounded Type Parameters
+Generic Methods and Bounded Type Parameters
+Generics, Inheritance, and Subtypes
+Type Inference
+Wildcards
+Upper Bounded Wildcards
+Unbounded Wildcards
+Lower Bounded Wildcards
+Wildcards and Subtyping
+Wildcard Capture and Helper Methods
+Guidelines for Wildcard Use
+Type Erasure
+Erasure of Generic Types
+Erasure of Generic Methods
+Effects of Type Erasure and Bridge Methods
+Non-Reifiable Types
+Restrictions on Generics
+Questions and Exercises
+Trail:
+Learning the Java Language
+Lesson:
+Generics (Updated)
+Home Page
+>
+Learning the Java Language
+>
+Generics (Updated)
+« Previous
+•
+Trail
+•
+Next »
+The Java Tutorials have been written for JDK 8. Examples and practices described in this page don't take advantage of improvements introduced in later releases and might use technology no longer available.
+See
+Dev.java
+for updated tutorials taking advantage of the latest releases.
+See
+Java Language Changes
+for a summary of updated language features in Java SE 9 and subsequent releases.
+See
+JDK Release Notes
+for information about new features, enhancements, and removed or deprecated options for all JDK releases.
+Generic Methods
+Generic methods
+are methods that introduce their own type parameters. This is similar to declaring a generic type, but the type parameter's scope is limited to the method where it is declared. Static and non-static generic methods are allowed, as well as generic class constructors.
+The syntax for a generic method includes a list of type parameters, inside angle brackets, which appears before the method's return type. For static generic methods, the type parameter section must appear before the method's return type.
+The
+Util
+class includes a generic method,
+compare
+, which compares two
+Pair
+objects:
+public class Util {
+public static <K, V> boolean compare(Pair<K, V> p1, Pair<K, V> p2)
+{
+        return p1.getKey().equals(p2.getKey()) &&
+               p1.getValue().equals(p2.getValue());
+    }
+}
+
+public class Pair<K, V> {
+
+    private K key;
+    private V value;
+
+    public Pair(K key, V value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    public void setKey(K key) { this.key = key; }
+    public void setValue(V value) { this.value = value; }
+    public K getKey()   { return key; }
+    public V getValue() { return value; }
+}
+The complete syntax for invoking this method would be:
+Pair<Integer, String> p1 = new Pair<>(1, "apple");
+Pair<Integer, String> p2 = new Pair<>(2, "pear");
+boolean same = Util.
+<Integer, String>
+compare(p1, p2);
+The type has been explicitly provided, as shown in bold.  Generally, this can be left out and the compiler will infer the type that is needed:
+Pair<Integer, String> p1 = new Pair<>(1, "apple");
+Pair<Integer, String> p2 = new Pair<>(2, "pear");
+boolean same = Util.compare(p1, p2);
+This feature, known as
+type inference
+, allows you to invoke a generic method as an ordinary method, without specifying a type between angle brackets. This topic is further discussed in the following section,
+Type Inference
+.
+« Previous
+•
+Trail
+•
+Next »
+About Oracle
+|
+Contact Us
+|
+Legal Notices
+|
+Terms of Use
+|
+Your Privacy Rights
+Copyright © 1995, 2024 Oracle and/or its affiliates. All rights reserved.
+Previous page:
+Raw Types
+Next page:
+Bounded Type Parameters

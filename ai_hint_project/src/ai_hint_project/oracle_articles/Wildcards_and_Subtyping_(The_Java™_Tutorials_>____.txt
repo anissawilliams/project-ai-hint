@@ -1,0 +1,152 @@
+Wildcards and Subtyping (The Java™ Tutorials >        
+            Learning the Java Language > Generics (Updated))
+A browser with JavaScript enabled is required for this page to operate properly.
+Documentation
+The Java™ Tutorials
+Hide TOC
+Generics (Updated)
+Why Use Generics?
+Generic Types
+Raw Types
+Generic Methods
+Bounded Type Parameters
+Generic Methods and Bounded Type Parameters
+Generics, Inheritance, and Subtypes
+Type Inference
+Wildcards
+Upper Bounded Wildcards
+Unbounded Wildcards
+Lower Bounded Wildcards
+Wildcards and Subtyping
+Wildcard Capture and Helper Methods
+Guidelines for Wildcard Use
+Type Erasure
+Erasure of Generic Types
+Erasure of Generic Methods
+Effects of Type Erasure and Bridge Methods
+Non-Reifiable Types
+Restrictions on Generics
+Questions and Exercises
+Trail:
+Learning the Java Language
+Lesson:
+Generics (Updated)
+Section:
+Wildcards
+Home Page
+>
+Learning the Java Language
+>
+Generics (Updated)
+« Previous
+•
+Trail
+•
+Next »
+The Java Tutorials have been written for JDK 8. Examples and practices described in this page don't take advantage of improvements introduced in later releases and might use technology no longer available.
+See
+Dev.java
+for updated tutorials taking advantage of the latest releases.
+See
+Java Language Changes
+for a summary of updated language features in Java SE 9 and subsequent releases.
+See
+JDK Release Notes
+for information about new features, enhancements, and removed or deprecated options for all JDK releases.
+Wildcards and Subtyping
+As described in
+Generics, Inheritance, and Subtypes
+, generic classes or interfaces are not related merely because there is a relationship between their types. However, you can use wildcards to create a relationship between generic classes or interfaces.
+Given the following two regular (non-generic) classes:
+class A { /* ... */ }
+class B extends A { /* ... */ }
+It would be reasonable to write the following code:
+B b = new B();
+A a = b;
+This example shows that inheritance of regular classes follows this rule of subtyping: class
+B
+is a subtype of class
+A
+if
+B
+extends
+A
+. This rule does not apply to generic types:
+List<B> lb = new ArrayList<>();
+List<A> la = lb;   // compile-time error
+Given that
+Integer
+is a subtype of
+Number
+, what is the relationship between
+List<Integer>
+and
+List<Number>
+?
+The common parent is
+List<?>
+.
+Although
+Integer
+is a subtype of
+Number
+,
+List<Integer>
+is not a subtype of
+List<Number>
+and, in fact, these two types are not related. The common parent of
+List<Number>
+and
+List<Integer>
+is
+List<?>
+.
+In order to create a relationship between these classes so that the code can access
+Number
+'s methods through
+List<Integer>
+'s elements, use an upper bounded wildcard:
+List<? extends Integer> intList = new ArrayList<>();
+List<? extends Number>  numList = intList;  // OK. List<? extends Integer> is a subtype of List<? extends Number>
+Because
+Integer
+is a subtype of
+Number
+, and
+numList
+is a list of
+Number
+objects, a relationship now exists between
+intList
+(a list of
+Integer
+objects) and
+numList
+. The following diagram shows the relationships between several
+List
+classes declared with both upper and lower bounded wildcards.
+A hierarchy of several generic
+List
+class declarations.
+The
+Guidelines for Wildcard Use
+section has more information about the ramifications of using upper and lower bounded wildcards.
+« Previous
+•
+Trail
+•
+Next »
+About Oracle
+|
+Contact Us
+|
+Legal Notices
+|
+Terms of Use
+|
+Your Privacy Rights
+Copyright © 1995, 2024 Oracle and/or its affiliates. All rights reserved.
+Previous page:
+Lower Bounded Wildcards
+Next page:
+Wildcard Capture and Helper Methods

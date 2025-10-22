@@ -9,10 +9,21 @@ import traceback
 sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 base_dir = os.path.dirname(__file__)
 
-# 📄 Load YAML
+
+@st.cache_data(show_spinner=False)
+def get_cached_explanation(persona, question):
+    return create_crew(persona, question)
+
+
+
+#  Load YAML
 def load_yaml(path):
     with open(path, 'r') as f:
         return yaml.safe_load(f)
+@st.cache_data(show_spinner=False)
+def get_cached_explanation(persona, question):
+    return create_crew(persona, question)
+
 
 agents_config = load_yaml(os.path.join(base_dir, 'ai_hint_project/src/ai_hint_project/config/agents.yaml'))
 
@@ -100,8 +111,9 @@ if any(x in user_question for x in ["def ", "class ", "{", "}", "()", "<", ">", 
 # 🚀 Trigger Explanation
 if st.button("Explain it!"):
     try:
-        with st.spinner("🧠 Thinking deeply..."):
-            result = create_crew(selected_persona, user_question)
+        with st.spinner("🧠 Thinking..."):
+            result = get_cached_explanation(selected_persona, user_question)
+
 
         if result:
             st.markdown("### 🗣️ Explanation")

@@ -1,0 +1,70 @@
+Lesson: Generics (The Java™ Tutorials > Bonus)
+A browser with JavaScript enabled is required for this page to operate properly.
+Documentation
+The Java™ Tutorials
+Hide TOC
+Generics
+Introduction
+Defining Simple Generics
+Generics and Subtyping
+Wildcards
+Generic Methods
+Interoperating with Legacy Code
+The Fine Print
+Class Literals as Runtime-Type Tokens
+More Fun with Wildcards
+Converting Legacy Code to Use Generics
+Acknowledgements
+Trail:
+Bonus
+Home Page
+>
+Bonus
+« Previous
+•
+Trail
+•
+Next »
+The Java Tutorials have been written for JDK 8. Examples and practices described in this page don't take advantage of improvements introduced in later releases and might use technology no longer available.
+See
+Dev.java
+for updated tutorials taking advantage of the latest releases.
+See
+Java Language Changes
+for a summary of updated language features in Java SE 9 and subsequent releases.
+See
+JDK Release Notes
+for information about new features, enhancements, and removed or deprecated options for all JDK releases.
+Lesson: Generics
+by Gilad Bracha
+Introduced in J2SE 5.0, this long-awaited enhancement to the type system allows a type or method to operate on objects of various types while providing compile-time type safety. It adds compile-time type safety to the Collections Framework and eliminates the drudgery of casting.
+Introduction
+Defining Simple Generics
+Generics and Subtyping
+Wildcards
+Generic Methods
+Interoperating with Legacy Code
+The Fine Print
+Class Literals as Runtime-Type Tokens
+More Fun with Wildcards
+Converting Legacy Code to Use Generics
+Acknowledgements
+« Previous
+•
+Trail
+•
+Next »
+About Oracle
+|
+Contact Us
+|
+Legal Notices
+|
+Terms of Use
+|
+Your Privacy Rights
+Copyright © 1995, 2024 Oracle and/or its affiliates. All rights reserved.
+Previous page:
+Table of Contents
+Next page:
+Introduction

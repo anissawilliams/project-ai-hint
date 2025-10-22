@@ -1,0 +1,103 @@
+Lesson: Classes and Objects (The Java™ Tutorials > Learning the Java Language)
+A browser with JavaScript enabled is required for this page to operate properly.
+Documentation
+The Java™ Tutorials
+Hide TOC
+Classes and Objects
+Classes
+Declaring Classes
+Declaring Member Variables
+Defining Methods
+Providing Constructors for Your Classes
+Passing Information to a Method or a Constructor
+Objects
+Creating Objects
+Using Objects
+More on Classes
+Returning a Value from a Method
+Using the this Keyword
+Controlling Access to Members of a Class
+Understanding Class Members
+Initializing Fields
+Summary of Creating and Using Classes and Objects
+Questions and Exercises
+Questions and Exercises
+Nested Classes
+Inner Class Example
+Local Classes
+Anonymous Classes
+Lambda Expressions
+Method References
+When to Use Nested Classes, Local Classes, Anonymous Classes, and Lambda Expressions
+Questions and Exercises
+Enum Types
+Questions and Exercises
+Trail:
+Learning the Java Language
+Home Page
+>
+Learning the Java Language
+« Previous
+•
+Trail
+•
+Next »
+The Java Tutorials have been written for JDK 8. Examples and practices described in this page don't take advantage of improvements introduced in later releases and might use technology no longer available.
+See
+Dev.java
+for updated tutorials taking advantage of the latest releases.
+See
+Java Language Changes
+for a summary of updated language features in Java SE 9 and subsequent releases.
+See
+JDK Release Notes
+for information about new features, enhancements, and removed or deprecated options for all JDK releases.
+Lesson: Classes and Objects
+With the knowledge you now have of the basics of the Java programming language, you can learn to write your own classes. In this 
+lesson, 
+you will find information about defining your own classes, including declaring member variables, methods, and constructors.
+You will learn to use your classes to create objects, and how to use the objects you create.
+This 
+lesson 
+ also covers nesting classes within other classes, and enumerations
+Classes
+This section shows you the anatomy of a class, and how
+to declare fields, methods, and constructors.
+Objects
+This section covers creating and using objects. You will learn how to instantiate an object, and, 
+once instantiated, how to use the
+dot
+operator to access the object's instance variables and methods.
+More on Classes
+This section covers more aspects of classes that depend on using object references and the
+dot
+operator 
+that you learned about in the preceding section: 
+returning values from methods, the
+this
+keyword, class vs. instance members, and access control.
+Nested Classes
+Static nested classes, inner classes, anonymous inner
+classes, local classes, and lambda expressions are covered.
+There is also a discussion on when to use which approach.
+Enum Types
+This section covers enumerations, specialized classes that allow you to define and use sets of constants.
+« Previous
+•
+Trail
+•
+Next »
+About Oracle
+|
+Contact Us
+|
+Legal Notices
+|
+Terms of Use
+|
+Your Privacy Rights
+Copyright © 1995, 2024 Oracle and/or its affiliates. All rights reserved.
+Previous page:
+Previous Lesson
+Next page:
+Classes

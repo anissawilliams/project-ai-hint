@@ -3,7 +3,9 @@ import yaml
 import re
 from crewai import Crew, Agent, Task
 from langchain_community.llms import Ollama
-
+from sentence_transformers import SentenceTransformer
+import faiss
+import json
 from . import levels
 
 os.environ["LITELLM_PROVIDER"] = "ollama"
@@ -12,7 +14,35 @@ os.environ["LITELLM_PROVIDER"] = "ollama"
 llm = Ollama(model="ollama/phi3:mini")
 
 
-# adding leveling
+from .tools.rag_tool import build_rag_tool
+
+base_dir = os.path.dirname(os.path.abspath(__file__))
+rag_folder = os.path.join(base_dir, "baeldung_scraper")
+
+rag_tool = build_rag_tool(
+    index_path=os.path.join(rag_folder, "baeldung_index.faiss"),
+    chunks_path=os.path.join(rag_folder, "chunks.json")
+)
+
+
+def load_rag_store(folder="baeldung_scraper"):
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    rag_path = os.path.join(base_dir, folder)
+
+    index_path = os.path.join(rag_path, "baeldung_index.faiss")
+    chunks_path = os.path.join(rag_path, "chunks.json")
+
+    if not os.path.exists(index_path):
+        raise FileNotFoundError(f"FAISS index not found at: {index_path}")
+    if not os.path.exists(chunks_path):
+        raise FileNotFoundError(f"Chunks file not found at: {chunks_path}")
+
+    index = faiss.read_index(index_path)
+    with open(chunks_path, "r", encoding="utf-8") as f:
+        chunks = json.load(f)
+    return index, chunks
+
+
 
 
 # Load YAML config
@@ -67,23 +97,23 @@ def create_crew(persona: str, user_question: str):
     )
 
     reaction = persona_reactions.get(persona, "")
-    if is_code_input(user_question):
-        task_description = f"{reaction}\n\n{user_question}"
-    else:
-        task_description = user_question
+    task_description = f"{reaction}\n\n{user_question}" if is_code_input(user_question) else user_question
+
+    # 🔍 Use RAG tool to retrieve context
+    context = rag_tool(user_question)
+
 
     task_template = tasks_config['tasks']['explainer']
     task = Task(
         name=task_template['name'],
-        description=task_template['description'].format(query=task_description),
+        description=task_template['description'].format(query=f"{task_description}\n\nRelevant Java context:\n{context}"),
         expected_output=task_template['expected_output'],
         agent=agent
     )
 
     crew = Crew(agents=[agent], tasks=[task], verbose=True)
     result = crew.kickoff()
-    # Update agent level after task completion
     levels.update_level(persona)
-    
+
     cleaned_content = re.sub(r"<think>.*?</think>\n?", "", result.tasks_output[0].raw, flags=re.DOTALL)
     return cleaned_content

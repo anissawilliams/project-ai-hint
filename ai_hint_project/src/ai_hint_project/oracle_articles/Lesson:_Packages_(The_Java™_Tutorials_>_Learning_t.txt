@@ -1,0 +1,56 @@
+Lesson: Packages (The Java™ Tutorials > Learning the Java Language)
+A browser with JavaScript enabled is required for this page to operate properly.
+Documentation
+The Java™ Tutorials
+Hide TOC
+Packages
+Creating and Using Packages
+Creating a Package
+Naming a Package
+Using Package Members
+Managing Source and Class Files
+Summary of Creating and Using Packages
+Questions and Exercises
+Trail:
+Learning the Java Language
+Home Page
+>
+Learning the Java Language
+« Previous
+•
+Trail
+•
+Next »
+The Java Tutorials have been written for JDK 8. Examples and practices described in this page don't take advantage of improvements introduced in later releases and might use technology no longer available.
+See
+Dev.java
+for updated tutorials taking advantage of the latest releases.
+See
+Java Language Changes
+for a summary of updated language features in Java SE 9 and subsequent releases.
+See
+JDK Release Notes
+for information about new features, enhancements, and removed or deprecated options for all JDK releases.
+Lesson: Packages
+This 
+lesson 
+explains how to bundle classes and interfaces into packages, how to use classes that are in packages, and how to arrange your file system so that the compiler can find your source files.
+« Previous
+•
+Trail
+•
+Next »
+About Oracle
+|
+Contact Us
+|
+Legal Notices
+|
+Terms of Use
+|
+Your Privacy Rights
+Copyright © 1995, 2024 Oracle and/or its affiliates. All rights reserved.
+Previous page:
+Previous Lesson
+Next page:
+Creating and Using Packages
