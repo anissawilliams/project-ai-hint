@@ -2,7 +2,9 @@ import os
 import yaml
 import re
 from crewai import Crew, Agent, Task
-from langchain_community.llms import Ollama
+from langchain_community.chat_models import ChatOllama
+
+
 from sentence_transformers import SentenceTransformer
 import faiss
 import json
@@ -11,7 +13,7 @@ from . import levels
 os.environ["LITELLM_PROVIDER"] = "ollama"
 
 # LangChain Ollama setup
-llm = Ollama(model="ollama/phi3:mini")
+llm = ChatOllama(model="phi3:mini")
 
 
 from .tools.rag_tool import build_rag_tool
