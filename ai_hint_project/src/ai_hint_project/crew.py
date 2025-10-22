@@ -10,10 +10,15 @@ import faiss
 import json
 from . import levels
 
-os.environ["LITELLM_PROVIDER"] = "ollama"
+from langchain.chat_models import ChatGroq
+import os
 
-# LangChain Ollama setup
-llm = ChatOllama(model="phi3:mini")
+llm = ChatGroq(
+    api_key=os.getenv("GROQ_API_KEY"),
+    model_name="mixtral-8x7b-32768",  # or "llama3-8b-8192"
+    temperature=0.7
+)
+
 
 
 from .tools.rag_tool import build_rag_tool
