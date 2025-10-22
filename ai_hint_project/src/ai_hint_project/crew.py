@@ -10,7 +10,8 @@ import faiss
 import json
 from . import levels
 
-from langchain.chat_models import ChatGroq
+from langchain_community.chat_models import ChatGroq
+
 import os
 
 llm = ChatGroq(
