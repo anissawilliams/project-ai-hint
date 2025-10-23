@@ -12,12 +12,37 @@ from . import levels
 
 import os
 from langchain_groq import ChatGroq
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+print("🔑 GROQ_API_KEY:", os.getenv("GROQ_API_KEY"))
 
-llm = ChatGroq(
-    model_name="mixtral-8x7b-32768",  # or "llama3-8b-8192"
-    temperature=0.7,
-    groq_api_key=os.getenv("GROQ_API_KEY")
-)
+print("API Key Loaded:", "Yes" if GROQ_API_KEY else "No")
+from langchain_groq import ChatGroq
+
+class GroqWrapper:
+    def __init__(self, model_name="llama-3.1-8b-instant", temperature=0.7):
+        self.llm = ChatGroq(
+            model_name=model_name,
+            temperature=temperature,
+            groq_api_key=os.getenv("GROQ_API_KEY")
+        )
+
+    def call(self, messages, **kwargs):
+        response = self.llm.invoke(messages)
+        # CrewAI expects a string, not an AIMessage object
+        return response.content if hasattr(response, "content") else str(response)
+
+
+    def supports_stop_words(self):
+        return False
+
+
+llm = GroqWrapper()
+
+
+
+
+print("LLM Initialized:", llm is not None)
+
 
 
 from .tools.rag_tool import build_rag_tool
@@ -118,6 +143,11 @@ def create_crew(persona: str, user_question: str):
     )
 
     crew = Crew(agents=[agent], tasks=[task], verbose=True)
+    agent.llm = llm
+    
+    print("Agent LLM:", agent.llm)
+    
+
     result = crew.kickoff()
     levels.update_level(persona)
 
