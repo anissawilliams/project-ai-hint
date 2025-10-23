@@ -1,7 +1,8 @@
 import streamlit as st
 import sys
 import os
-from ai_hint_project.src.ai_hint_project.crew import create_crew
+from ai_hint_project.crew import create_crew
+
 import yaml
 import traceback
 
